@@ -1,4 +1,14 @@
 import React from "react";
-import Routes from "../routes";
+import AppRoutes from "../routes";
 
-export default props => <>{Routes}</>;
+
+
+const App = () => {
+    return (
+        <>
+            <AppRoutes/>
+        </>
+    )
+}
+
+export default App
