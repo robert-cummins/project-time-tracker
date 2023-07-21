@@ -1,26 +1,24 @@
 import React from "react";
-import { connect } from "react-redux";
 import { logoutUser } from "../../actions/auth";
-import { useHistory } from "react-router-dom";
+import Button from '@mui/material/Button';
+import { useDispatch } from 'react-redux';
 
-const Logout = ({ dispatchLogoutUser }) => {
-  const history = useHistory();
-  
+
+const Logout = () => {
+  const dispatch = useDispatch();
+
   const handleClick = () => {
-    dispatchLogoutUser().then(() => history.push("/"));
+    dispatch(logoutUser());
   };
-
+  
   return (
-    <button className='p-4' onClick={handleClick}>
-      Logout
-    </button>
+    <Button 
+      color="inherit"
+      onClick={handleClick}
+    >
+      logout
+    </Button>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchLogoutUser: () => dispatch(logoutUser())
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Logout);
+export default Logout;

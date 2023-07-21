@@ -10,8 +10,8 @@ development:
   host: localhost
   host: 127.0.0.1
   port: 5432
-  username: postgres
-  password: docker
+  username: <%= Rails.application.credentials.development[:db_username] %>
+  password: <%= Rails.application.credentials.development[:db_password] %>
   database: project_time_tracker_development
 
   

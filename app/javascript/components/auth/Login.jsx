@@ -1,77 +1,123 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
 import { loginUser } from "../../actions/auth";
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { useDispatch } from 'react-redux';
 
-class Login extends React.Component {
-  state = {
-    email: "",
-    password: "",
-    error: false
-  };
-
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const { email, password } = this.state;
-    this.props
-      .dispatchLoginUser({ email, password })
-      .then(() => this.props.history.push("/"))
-      .catch(() => this.setState({ error: true }));
-  };
-
-  render() {
-    return (
-      <form
-        onSubmit={this.handleSubmit}
-        className='w-11/12 max-w-2xl mx-auto mt-8'
-      >
-        <h1 className='font-bold text-3xl'>Log In</h1>
-        <p className="h-8 text-red-400">{this.state.error && "Invalid email or password"}</p>
-        <fieldset>
-          <label className='block uppercase mb-2' for='email'>
-            Email:
-          </label>
-          <input
-            type='text'
-            name='email'
-            id='email'
-            className='w-full border-2 focus:outline-none focus:ring-2 p-4 mb-4'
-            onChange={this.handleChange}
-            value={this.state.email}
-          />
-        </fieldset>
-        <fieldset>
-          <label className='block uppercase mb-2' for='password'>
-            Password:
-          </label>
-          <input
-            type='password'
-            name='password'
-            id='password'
-            className="w-full border-2 focus:outline-none focus:ring-2 p-4 mb-4"
-            onChange={this.handleChange}
-            value={this.state.password}
-          />
-        </fieldset>
-        <input
-          className='w-full text-center uppercase p-4 bg-blue-300 cursor-pointer mt-4'
-          type='submit'
-          value='Log In'
-        />
-      </form>
-    );
-  }
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="/">
+        Project Time Tracker
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchLoginUser: (credentials) => dispatch(loginUser(credentials))
-  };
-};
 
-export default connect(null, mapDispatchToProps)(Login);
+const Login = () => {
+  const dispatch = useDispatch();
+  const [loginError, setLoginError] = useState("")
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      email: formData.get('email'),
+      password: formData.get('password'),
+    };
+    
+    dispatch(loginUser(data))
+      .catch(() => setLoginError(true));
+  };
+
+
+  return (
+
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        {loginError && 
+          <Typography color="error" >
+            Invalid email or password
+          </Typography>
+        }
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="/signup_page" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
+    </Container>
+  );
+}
+
+export default Login;

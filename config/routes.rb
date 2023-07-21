@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   }
   
   get '/current_user', to: 'current_user#index'
-  root 'homepage#index'
+
+  root 'react#index'
+  get "*path", to: "react#index"
   
 end

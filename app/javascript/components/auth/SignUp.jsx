@@ -1,77 +1,137 @@
-import React from "react";
-import { connect } from "react-redux";
+import React, {useState} from "react";
 import { signupUser } from "../../actions/auth";
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 
-class Signup extends React.Component {
-  state = {
-    email: "",
-    password: "",
-    errors: {status: {message: ""}}
-  };
-
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const { email, password } = this.state;
-    this.props
-      .dispatchSignupUser({ email, password })
-      .then(() => this.props.history.push("/"))
-      .catch((errors) => this.setState({ errors }));
-  };
-
-  render() {
-    return (
-      <form
-        onSubmit={this.handleSubmit}
-        className='w-11/12 max-w-2xl mx-auto mt-8'
-      >
-        <h1 className='font-bold text-3xl mb-2'>Sign Up</h1>
-        <p className='h-8 text-red-400'>{this.state.errors.status.message}</p>
-        <fieldset>
-          <label className='block uppercase mb-2' htmlFor='email'>
-            Email:
-          </label>
-          <input
-            type='text'
-            name='email'
-            id='email'
-            className='w-full border-2 focus:outline-none focus:ring-2 p-4 mb-4'
-            onChange={this.handleChange}
-            value={this.state.email}
-          />
-        </fieldset>
-        <fieldset>
-          <label className='block uppercase mb-2' htmlFor='password'>
-            Password:
-          </label>
-          <input
-            type='password'
-            name='password'
-            id='password'
-            className='w-full border-2 focus:outline-none focus:ring-2 p-4 mb-4'
-            onChange={this.handleChange}
-            value={this.state.password}
-          />
-        </fieldset>
-        <input
-          className='w-full text-center uppercase p-4 bg-blue-300 cursor-pointer mt-4'
-          type='submit'
-          value='Sign Up'
-        />
-      </form>
-    );
-  }
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Project Time Tracker
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    dispatchSignupUser: (credentials) => dispatch(signupUser(credentials))
-  };
-};
 
-export default connect(null, mapDispatchToProps)(Signup);
+const Signup = () => {
+  const dispatch = useDispatch();
+  const [signupError, setSignupError] = useState({})
+  const navigate = useNavigate();
+
+  const handleSubmit =  (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      email: formData.get('email'),
+      password: formData.get('password'),
+      first_name: formData.get('firstName'),
+      last_name: formData.get('lastName'),
+    };
+    
+
+    try {
+      dispatch(signupUser(data))
+    } catch (errors) {
+      setSignupError(errors);
+    }
+  };
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign up
+        </Typography>
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                autoComplete="given-name"
+                name="firstName"
+                required
+                fullWidth
+                id="firstName"
+                label="First Name"
+                autoFocus
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                autoComplete="family-name"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="new-password"
+              />
+            </Grid>
+          </Grid>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign Up
+          </Button>
+          <Grid container justifyContent="center">
+            <Grid item>
+              <Link href="/" variant="body2">
+                Already have an account? Sign in
+              </Link>
+            </Grid>
+          </Grid>
+        </Box>
+      </Box>
+      <Copyright sx={{ mt: 5 }} />
+    </Container>
+  );
+}
+
+export default Signup;
