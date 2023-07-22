@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  start_time: 
+  stop_time: 
+  project: one
+  user: one
+
+two:
+  start_time: 
+  stop_time: 
+  project: two
+  user: two
