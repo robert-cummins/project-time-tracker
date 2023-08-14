@@ -25,7 +25,7 @@ const NavBar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{backgroundColor: '#131222'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* Mobile Menu (Burger Icon) */}
@@ -61,7 +61,7 @@ const NavBar = () => {
                 [
                   <MenuItem key="login">
                     <Button
-                      href={"/login_page"}
+                      href={"/"}
                       variant="contained"
                       sx={{ my: 2, color: 'white', display: 'block' }}
                     >
@@ -88,7 +88,7 @@ const NavBar = () => {
               <>
                 <Button
                   key={"Login"}
-                  href={"/login_page"}
+                  href={"/"}
                   color="inherit"
                 >
                   Login

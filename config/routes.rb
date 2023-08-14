@@ -10,8 +10,11 @@ Rails.application.routes.draw do
   }
   
   get '/current_user', to: 'current_user#index'
+    
+  namespace :api do
+    get '/user/:user_id/projects', to: 'projects#index'
+  end
 
   root 'react#index'
   get "*path", to: "react#index"
-  
 end
